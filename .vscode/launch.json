@@ -1,0 +1,55 @@
+{
+	"configurations": [
+
+		{
+			"type": "aws-sam",
+			"request": "direct-invoke",
+			"name": "Formula_1_Agent_Handler:Formula_1_Agent_Handler (nodejs22.x)",
+			"invokeTarget": {
+				"target": "template",
+				"templatePath": "${workspaceFolder}/Formula_1_Agent_Handler/template.yaml",
+				"logicalId": "Formula_1_Agent_Handler"
+			},
+			"lambda": {
+				"payload": {},
+				"environmentVariables": {},
+				"runtime": "nodejs22.x"
+			}
+		},
+		{
+			"type": "aws-sam",
+			"request": "direct-invoke",
+			"name": "API Formula_1_Agent_Handler:Formula_1_Agent_Handler (nodejs22.x)",
+			"invokeTarget": {
+				"target": "api",
+				"templatePath": "${workspaceFolder}/Formula_1_Agent_Handler/template.yaml",
+				"logicalId": "Formula_1_Agent_Handler"
+			},
+			"api": {
+				"path": "/hello",
+				"httpMethod": "get",
+				"payload": {
+					"json": {}
+				}
+			},
+			"lambda": {
+				"runtime": "nodejs22.x"
+			}
+		},
+		{
+			"type": "aws-sam",
+			"request": "direct-invoke",
+			"name": "index.lambda_handler",
+			"invokeTarget": {
+				"target": "code",
+				"projectRoot": "APN-SF-PC-SyntheticsCanaryScripts/src/canaries/page_latency_canary",
+				"lambdaHandler": "index.lambda_handler"
+			},
+			"lambda": {
+				"runtime": "node18.x",
+				"payload": {},
+				"environmentVariables": {}
+			}
+		}
+	]
+}

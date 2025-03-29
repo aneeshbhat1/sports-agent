@@ -1,0 +1,8 @@
+{
+	"name": "f1-query-handler",
+	"version": "1.0.0",
+	"dependencies": {
+	  "@aws-sdk/client-bedrock-agent-runtime": "^3.x.x"
+	}
+  }
+  

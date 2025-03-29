@@ -1,0 +1,217 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Formula_1_Agent_Handler
+
+  Sample SAM Template for Formula_1_Agent_Handler
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+  Api:
+    Cors:
+      AllowMethods: '''POST,OPTIONS'''
+      AllowHeaders: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
+      AllowOrigin: '''http://localhost:3000'''
+Resources:
+  f1AgentHelper:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: f1AgentHelper
+      Handler: app.handler
+      Runtime: nodejs22.x
+      Architectures:
+      - x86_64
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - bedrock:InvokeModel
+          Resource: '*'
+        - Effect: Allow
+          Action:
+          - cloudwatch:PutMetricData
+          - cloudwatch:GetMetricData
+          - cloudwatch:GetMetricStatistics
+          - cloudwatch:ListMetrics
+          Resource: '*'
+    Metadata:
+      SamResourceId: f1AgentHelper
+  f1AgentHelperPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Ref: f1AgentHelper
+      Principal: bedrock.amazonaws.com
+      SourceAccount:
+        Ref: AWS::AccountId
+      SourceArn:
+        Fn::Sub: arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent/${SportsAgent}
+  f1QueryHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: f1QueryHandler
+      Handler: app.handler
+      Runtime: nodejs22.x
+      Architectures:
+      - x86_64
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /query
+            Method: post
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - bedrock:InvokeAgent
+          - bedrock:InvokeModel
+          Resource:
+          - Fn::Sub: arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent/${SportsAgent}
+          - Fn::Sub: arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent-alias/${SportsAgent}/*
+        - Effect: Allow
+          Action:
+          - bedrock-agent-runtime:InvokeAgent
+          Resource:
+          - Fn::Sub: arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent/${SportsAgent}
+          - Fn::Sub: arn:aws:bedrock:${AWS::Region}:${AWS::AccountId}:agent-alias/${SportsAgent}/*
+        - Effect: Allow
+          Action:
+          - bedrock:ListAgents
+          - bedrock:ListAgentAliases
+          Resource: '*'
+        - Effect: Allow
+          Action:
+          - cloudwatch:PutMetricData
+          - cloudwatch:GetMetricData
+          - cloudwatch:GetMetricStatistics
+          - cloudwatch:ListMetrics
+          Resource: '*'
+    Metadata:
+      SamResourceId: f1QueryHandler
+  SportsAgentRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: bedrock.amazonaws.com
+          Action: sts:AssumeRole
+      ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+      - PolicyName: BedrockAgentLambdaInvoke
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - lambda:InvokeFunction
+            Resource:
+              Fn::GetAtt:
+              - f1AgentHelper
+              - Arn
+      - PolicyName: S3SchemaAccess
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - s3:GetObject
+            Resource:
+            - arn:aws:s3:::test-agent-training/OpenF1.json
+      - PolicyName: BedrockFoundationModelAccess
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - bedrock:InvokeModel
+            Resource:
+            - arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-lite-v1:0
+  SportsAgent:
+    Type: AWS::Bedrock::Agent
+    Properties:
+      AgentName: Sports-Agent
+      FoundationModel: amazon.nova-lite-v1:0
+      Instruction: act as a chatbot by providing responses to the generic queries
+        related to F1 and cricket posted by users
+      AutoPrepare: true
+      Description: F1 Sports Information Agent
+      IdleSessionTTLInSeconds: 1800
+      AgentResourceRoleArn:
+        Fn::GetAtt:
+        - SportsAgentRole
+        - Arn
+  SportsAgentEndpoint:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      EndpointConfiguration: REGIONAL
+      DefinitionBody:
+        openapi: 3.0.0
+        info:
+          title: Sports queries end point
+          version: 1.0.0
+        paths:
+          /sportsquery:
+            post:
+              summary: Sports Query Endpoint
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: AWS_PROXY
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${f1QueryHandler.Arn}/invocations
+              responses:
+                '200':
+                  description: Successful response
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          message:
+                            type: string
+      Cors:
+        AllowMethods: '''POST,OPTIONS'''
+        AllowHeaders: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
+        AllowOrigin: '''http://localhost:3000'''
+Outputs:
+  f1AgentHelper:
+    Description: F1 Agent Helper Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - f1AgentHelper
+      - Arn
+  f1AgentHelperIamRole:
+    Description: Implicit IAM Role created for F1 Agent Helper function
+    Value:
+      Fn::GetAtt:
+      - f1AgentHelperRole
+      - Arn
+  sportsQueryHandlerApi:
+    Description: API Gateway endpoint URL for Sports Query Handler
+    Value:
+      Fn::Sub: https://${SportsAgentEndpoint}.execute-api.${AWS::Region}.amazonaws.com/Prod/sportsquery
+  f1QueryHandler:
+    Description: F1 Query Handler Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - f1QueryHandler
+      - Arn
+  SportsAgentId:
+    Description: Sports Agent ID
+    Value:
+      Ref: SportsAgent
+  SportsAgentRoleArn:
+    Description: Sports Agent Role ARN
+    Value:
+      Fn::GetAtt:
+      - SportsAgentRole
+      - Arn
