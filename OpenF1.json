@@ -1,0 +1,1320 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Ergast F1 API",
+		"description": "API for accessing Formula 1 data",
+		"version": "1.0.0"
+	},
+	"servers": [
+		{
+			"url": "http://ergast.com/api/f1"
+		}
+	],
+	"paths": {
+		"/year/round/drivers/driverid": {
+			"get": {
+				"operationId": "getDriverInformation",
+				"summary": "Get driver information",
+				"description": "Returns information about F1 drivers. All parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					{
+						"name": "driverid",
+						"in": "query",
+						"required": false,
+						"description": "The ID of the driver",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DriverResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round/constructors/constructorid": {
+			"get": {
+				"operationId": "getConstructorInformation",
+				"summary": "Get constructor information",
+				"description": "Returns information about F1 constructors. All parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					{
+						"name": "constructorid",
+						"in": "query",
+						"required": false,
+						"description": "The ID of the constructor",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ConstructorResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round/circuits/circuitid": {
+			"get": {
+				"operationId": "getCircuitInformation",
+				"summary": "Get circuit information",
+				"description": "Returns information about F1 circuits. All parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					{
+						"name": "circuitid",
+						"in": "query",
+						"required": false,
+						"description": "The ID of the circuit",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CircuitResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/seasons": {
+			"get": {
+				"operationId": "getSeasons",
+				"summary": "Get all Formula 1 seasons",
+				"description": "Returns information about all Formula 1 seasons.",
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SeasonResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round": {
+			"get": {
+				"operationId": "getRaceInformation",
+				"summary": "Get race information",
+				"description": "Returns information about a specific F1 race. Both parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RaceResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round/driverStandings": {
+			"get": {
+				"operationId": "getDriverStandings",
+				"summary": "Get driver standings",
+				"description": "Returns the driver standings for a specific F1 season and round. Both parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DriverStandingsResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round/constructorStandings": {
+			"get": {
+				"operationId": "getConstructorStandings",
+				"summary": "Get constructor standings",
+				"description": "Returns the constructor standings for a specific F1 season and round. Both parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ConstructorStandingsResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round/status": {
+			"get": {
+				"operationId": "getRaceStatus",
+				"summary": "Get race status",
+				"description": "Returns the status of drivers for a specific F1 race. Both parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StatusResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round/laps/lapnumber": {
+			"get": {
+				"operationId": "getLapTimes",
+				"summary": "Get lap times",
+				"description": "Returns lap times for a specific F1 race and lap. All parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					{
+						"name": "lapnumber",
+						"in": "query",
+						"required": false,
+						"description": "The lap number",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LapTimesResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/year/round/pitstops/pitstopnumber": {
+			"get": {
+				"operationId": "getPitStops",
+				"summary": "Get pit stop information",
+				"description": "Returns pit stop information for a specific F1 race. All parameters are optional.",
+				"parameters": [
+					{
+						"name": "year",
+						"in": "query",
+						"required": false,
+						"description": "The year of the Formula 1 season",
+						"schema": {
+							"type": "integer",
+							"minimum": 1950,
+							"maximum": 2023
+						}
+					},
+					{
+						"name": "round",
+						"in": "query",
+						"required": false,
+						"description": "The round number of the race",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					},
+					{
+						"name": "pitstopnumber",
+						"in": "query",
+						"required": false,
+						"description": "The pit stop number",
+						"schema": {
+							"type": "integer",
+							"minimum": 1
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PitStopsResponse"
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"DriverResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"DriverTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"Drivers": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"driverId": {
+													"type": "string"
+												},
+												"permanentNumber": {
+													"type": "string"
+												},
+												"code": {
+													"type": "string"
+												},
+												"url": {
+													"type": "string"
+												},
+												"givenName": {
+													"type": "string"
+												},
+												"familyName": {
+													"type": "string"
+												},
+												"dateOfBirth": {
+													"type": "string"
+												},
+												"nationality": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"ConstructorResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"ConstructorTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"Constructors": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"constructorId": {
+													"type": "string"
+												},
+												"url": {
+													"type": "string"
+												},
+												"name": {
+													"type": "string"
+												},
+												"nationality": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"CircuitResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"CircuitTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"Circuits": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"circuitId": {
+													"type": "string"
+												},
+												"url": {
+													"type": "string"
+												},
+												"circuitName": {
+													"type": "string"
+												},
+												"Location": {
+													"type": "object",
+													"properties": {
+														"lat": {
+															"type": "string"
+														},
+														"long": {
+															"type": "string"
+														},
+														"locality": {
+															"type": "string"
+														},
+														"country": {
+															"type": "string"
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"SeasonResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"SeasonTable": {
+								"type": "object",
+								"properties": {
+									"Seasons": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"season": {
+													"type": "string"
+												},
+												"url": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"RaceResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"RaceTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"Races": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"season": {
+													"type": "string"
+												},
+												"round": {
+													"type": "string"
+												},
+												"url": {
+													"type": "string"
+												},
+												"raceName": {
+													"type": "string"
+												},
+												"Circuit": {
+													"type": "object",
+													"properties": {
+														"circuitId": {
+															"type": "string"
+														},
+														"url": {
+															"type": "string"
+														},
+														"circuitName": {
+															"type": "string"
+														},
+														"Location": {
+															"type": "object",
+															"properties": {
+																"lat": {
+																	"type": "string"
+																},
+																"long": {
+																	"type": "string"
+																},
+																"locality": {
+																	"type": "string"
+																},
+																"country": {
+																	"type": "string"
+																}
+															}
+														}
+													}
+												},
+												"date": {
+													"type": "string"
+												},
+												"time": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"DriverStandingsResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"StandingsTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"StandingsLists": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"season": {
+													"type": "string"
+												},
+												"round": {
+													"type": "string"
+												},
+												"DriverStandings": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"position": {
+																"type": "string"
+															},
+															"positionText": {
+																"type": "string"
+															},
+															"points": {
+																"type": "string"
+															},
+															"wins": {
+																"type": "string"
+															},
+															"Driver": {
+																"type": "object",
+																"properties": {
+																	"driverId": {
+																		"type": "string"
+																	},
+																	"permanentNumber": {
+																		"type": "string"
+																	},
+																	"code": {
+																		"type": "string"
+																	},
+																	"url": {
+																		"type": "string"
+																	},
+																	"givenName": {
+																		"type": "string"
+																	},
+																	"familyName": {
+																		"type": "string"
+																	},
+																	"dateOfBirth": {
+																		"type": "string"
+																	},
+																	"nationality": {
+																		"type": "string"
+																	}
+																}
+															},
+															"Constructors": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"constructorId": {
+																			"type": "string"
+																		},
+																		"url": {
+																			"type": "string"
+																		},
+																		"name": {
+																			"type": "string"
+																		},
+																		"nationality": {
+																			"type": "string"
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"ConstructorStandingsResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"StandingsTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"StandingsLists": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"season": {
+													"type": "string"
+												},
+												"round": {
+													"type": "string"
+												},
+												"ConstructorStandings": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"position": {
+																"type": "string"
+															},
+															"positionText": {
+																"type": "string"
+															},
+															"points": {
+																"type": "string"
+															},
+															"wins": {
+																"type": "string"
+															},
+															"Constructor": {
+																"type": "object",
+																"properties": {
+																	"constructorId": {
+																		"type": "string"
+																	},
+																	"url": {
+																		"type": "string"
+																	},
+																	"name": {
+																		"type": "string"
+																	},
+																	"nationality": {
+																		"type": "string"
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"StatusResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"StatusTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"Status": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"statusId": {
+													"type": "string"
+												},
+												"count": {
+													"type": "string"
+												},
+												"status": {
+													"type": "string"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"LapTimesResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"RaceTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"Races": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"season": {
+													"type": "string"
+												},
+												"round": {
+													"type": "string"
+												},
+												"url": {
+													"type": "string"
+												},
+												"raceName": {
+													"type": "string"
+												},
+												"Circuit": {
+													"type": "object",
+													"properties": {
+														"circuitId": {
+															"type": "string"
+														},
+														"url": {
+															"type": "string"
+														},
+														"circuitName": {
+															"type": "string"
+														},
+														"Location": {
+															"type": "object",
+															"properties": {
+																"lat": {
+																	"type": "string"
+																},
+																"long": {
+																	"type": "string"
+																},
+																"locality": {
+																	"type": "string"
+																},
+																"country": {
+																	"type": "string"
+																}
+															}
+														}
+													}
+												},
+												"date": {
+													"type": "string"
+												},
+												"time": {
+													"type": "string"
+												},
+												"Laps": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"number": {
+																"type": "string"
+															},
+															"Timings": {
+																"type": "array",
+																"items": {
+																	"type": "object",
+																	"properties": {
+																		"driverId": {
+																			"type": "string"
+																		},
+																		"position": {
+																			"type": "string"
+																		},
+																		"time": {
+																			"type": "string"
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"PitStopsResponse": {
+				"type": "object",
+				"properties": {
+					"MRData": {
+						"type": "object",
+						"properties": {
+							"xmlns": {
+								"type": "string"
+							},
+							"series": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							},
+							"limit": {
+								"type": "string"
+							},
+							"offset": {
+								"type": "string"
+							},
+							"total": {
+								"type": "string"
+							},
+							"RaceTable": {
+								"type": "object",
+								"properties": {
+									"season": {
+										"type": "string"
+									},
+									"round": {
+										"type": "string"
+									},
+									"Races": {
+										"type": "array",
+										"items": {
+											"type": "object",
+											"properties": {
+												"season": {
+													"type": "string"
+												},
+												"round": {
+													"type": "string"
+												},
+												"url": {
+													"type": "string"
+												},
+												"raceName": {
+													"type": "string"
+												},
+												"Circuit": {
+													"type": "object",
+													"properties": {
+														"circuitId": {
+															"type": "string"
+														},
+														"url": {
+															"type": "string"
+														},
+														"circuitName": {
+															"type": "string"
+														},
+														"Location": {
+															"type": "object",
+															"properties": {
+																"lat": {
+																	"type": "string"
+																},
+																"long": {
+																	"type": "string"
+																},
+																"locality": {
+																	"type": "string"
+																},
+																"country": {
+																	"type": "string"
+																}
+															}
+														}
+													}
+												},
+												"date": {
+													"type": "string"
+												},
+												"time": {
+													"type": "string"
+												},
+												"PitStops": {
+													"type": "array",
+													"items": {
+														"type": "object",
+														"properties": {
+															"driverId": {
+																"type": "string"
+															},
+															"lap": {
+																"type": "string"
+															},
+															"stop": {
+																"type": "string"
+															},
+															"time": {
+																"type": "string"
+															},
+															"duration": {
+																"type": "string"
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
